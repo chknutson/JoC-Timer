@@ -184,3 +184,4 @@ export default tseslint.config([
 
 Contributors
 John Schlautman (schlajo)
+Michelle Evans(Shelly)
