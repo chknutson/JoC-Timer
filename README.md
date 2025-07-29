@@ -67,5 +67,3 @@ export default tseslint.config([
   },
 ])
 ```
-
-# adding name  Chris Knutson
