@@ -1,0 +1,54 @@
+/* Reset + base styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9fafb;
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+
+/* App container */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background-color: #bbf7d0;
+  color: #166534;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #86efac;
+  width: 100%;
+}
+
+/* Main content layout */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+
+  /* Limit and center main content */
+  max-width: 900px;
+  width: 100%;
+}
+
+/* Card sections */
+section {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  width: 100%;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
