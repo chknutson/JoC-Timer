@@ -90,7 +90,7 @@ CTRL + C
 ---
 
 ## 📌 Notes
-- TailwindCSS, Vite, and Radix UI are already installed — no need to install them separately.
+- TailwindCSS, Vite are already installed — no need to install them separately.
 - If you see **port already in use**, close the other program or let Vite run on a different port.
 - Your work will auto-refresh in the browser whenever you save changes.
 
@@ -189,3 +189,4 @@ Chris Knutson (ck_tech)
 Natalya Van Rooy (Nata)
 Daniel Wroblewski (perfmaster1)
 Geno Roseboro (GenoR_TheGeek93)
+Mindi Briese (mindi3473)
