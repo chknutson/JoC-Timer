@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 
 import Header from "./components/Header";
 import PriorityGrid from "./components/PriorityGrid";
@@ -8,7 +8,7 @@ import Plant from "./components/Plant";
 
 export default function App() {
   return (
-    <div>
+    <div className="app">
       <Header />
       <main>
         <PriorityGrid />
