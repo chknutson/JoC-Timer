@@ -28,7 +28,7 @@ function AddTaskForm() {
   return (
     <div className="add-task-container">
       <button onClick={() => setShowForm(!showForm)}>
-        {showForm ? 'Close Form' : 'Add Task'}
+        {showForm ? 'Close Form' : '+ Add Task'}
       </button>
 
       {showForm && (

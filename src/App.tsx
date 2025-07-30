@@ -5,7 +5,6 @@ import PriorityGrid from "./components/PriorityGrid";
 import GoalTracker from "./components/GoalTracker";
 import Timer from "./components/Timer";
 import Plant from "./components/Plant";
-import AddTaskForm from "./components/AddTaskForm";
 
 
 export default function App() {
@@ -17,7 +16,6 @@ export default function App() {
         <GoalTracker />
         <Timer />
         <Plant />
-        <AddTaskForm />
       </main>
     </div>
   );
