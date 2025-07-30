@@ -1,6 +1,8 @@
 
+
 import { useState } from "react";
-import { plantStages } from "../assets/plantStages";
+
+const plantStages = ["🌱", "🌿", "🌳"];
 
 export default function Plant() {
   const [stage, setStage] = useState(0);
@@ -43,19 +45,21 @@ export default function Plant() {
       >
         Grow Plant
       </button>
+
+
 <button
-        onClick={resetPlant}
-        style={{
-          padding: "0.5rem 1rem",
-          fontSize: "1rem",
-          background: "#fca5a5",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer"
-        }}
-      >
-        Reset
-      </button>
-    </section>
+  onClick={resetPlant}
+  style={{
+    padding: "0.5rem 1rem",
+    fontSize: "1rem",
+    background: "#fca5a5",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  }}
+>
+  Reset Plant
+</button>
+   </section>
   );
 }
