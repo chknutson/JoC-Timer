@@ -6,7 +6,6 @@ import GoalTracker from "./components/GoalTracker";
 import Timer from "./components/Timer";
 import Plant from "./components/Plant";
 
-
 export default function App() {
   return (
     <div>
