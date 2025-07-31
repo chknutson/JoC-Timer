@@ -12,7 +12,6 @@ export default function GoalTracker() {
   const [goals, setGoals] = useLocalStorage<Goal[]>('weekly-goals', []);
   const [newGoalText, setNewGoalText] = useState('');
   const [isAddingGoal, setIsAddingGoal] = useState(false);
-  const [showSaveMessage, setShowSaveMessage] = useState(false);
 
   const addGoal = () => {
     if (newGoalText.trim()) {
@@ -40,20 +39,6 @@ export default function GoalTracker() {
     setGoals(goals.filter(goal => goal.id !== goalId));
   };
 
-  const handleSave = () => {
-    try {
-      // Explicitly save the current goals to localStorage
-      localStorage.setItem('weekly-goals', JSON.stringify(goals));
-      console.log('Goals saved to localStorage:', goals);
-      
-      setShowSaveMessage(true);
-      setTimeout(() => setShowSaveMessage(false), 2000);
-    } catch (error) {
-      console.error('Error saving goals:', error);
-      alert('Error saving goals. Please try again.');
-    }
-  };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       addGoal();
@@ -67,31 +52,16 @@ export default function GoalTracker() {
     <section className="bg-white rounded-lg shadow-md p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800">🔵 Weekly Goals</h2>
-        <div className="flex gap-2">
-          {!isAddingGoal && (
-            <button
-              onClick={() => setIsAddingGoal(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-            >
-              <span className="text-lg">+</span>
-              Add Goal
-            </button>
-          )}
+        {!isAddingGoal && (
           <button
-            onClick={handleSave}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+            onClick={() => setIsAddingGoal(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
           >
-            <span className="text-sm">💾</span>
-            Save
+            <span className="text-lg">+</span>
+            Add Goal
           </button>
-        </div>
+        )}
       </div>
-
-      {showSaveMessage && (
-        <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm">
-          ✅ Goals saved successfully!
-        </div>
-      )}
 
       {isAddingGoal && (
         <div className="mb-4 p-4 bg-gray-50 rounded-lg border-2 border-blue-200">
