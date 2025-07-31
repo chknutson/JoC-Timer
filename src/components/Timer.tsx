@@ -79,7 +79,7 @@ export default function Timer() {
       localStorage.setItem('pomodoroSessions', JSON.stringify([...existingSessions, session]));
     }
 
-  }, [timeLeft, isRunning, selectedTask, addPlantPoint, tasks]);
+  }, [timeLeft, isRunning, selectedTask, addPlantPoint, tasks, addTimerPoints]);
 
 
   const formatTime = (seconds: number) => {
