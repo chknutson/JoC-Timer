@@ -12,7 +12,6 @@ export default function GoalTracker() {
   const [goals, setGoals] = useLocalStorage<Goal[]>('weekly-goals', []);
   const [newGoalText, setNewGoalText] = useState('');
   const [isAddingGoal, setIsAddingGoal] = useState(false);
-  const [showSaveMessage, setShowSaveMessage] = useState(false);
 
   const addGoal = () => {
     if (newGoalText.trim()) {
@@ -29,8 +28,8 @@ export default function GoalTracker() {
   };
 
   const toggleGoal = (goalId: string) => {
-    setGoals(goals.map(goal => 
-      goal.id === goalId 
+    setGoals(goals.map(goal =>
+      goal.id === goalId
         ? { ...goal, completed: !goal.completed }
         : goal
     ));
@@ -38,20 +37,6 @@ export default function GoalTracker() {
 
   const deleteGoal = (goalId: string) => {
     setGoals(goals.filter(goal => goal.id !== goalId));
-  };
-
-  const handleSave = () => {
-    try {
-      // Explicitly save the current goals to localStorage
-      localStorage.setItem('weekly-goals', JSON.stringify(goals));
-      console.log('Goals saved to localStorage:', goals);
-      
-      setShowSaveMessage(true);
-      setTimeout(() => setShowSaveMessage(false), 2000);
-    } catch (error) {
-      console.error('Error saving goals:', error);
-      alert('Error saving goals. Please try again.');
-    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -67,31 +52,16 @@ export default function GoalTracker() {
     <section className="bg-white rounded-lg shadow-md p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800">🔵 Weekly Goals</h2>
-        <div className="flex gap-2">
-          {!isAddingGoal && (
-            <button
-              onClick={() => setIsAddingGoal(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-            >
-              <span className="text-lg">+</span>
-              Add Goal
-            </button>
-          )}
+        {!isAddingGoal && (
           <button
-            onClick={handleSave}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+            onClick={() => setIsAddingGoal(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
           >
-            <span className="text-sm">💾</span>
-            Save
+            <span className="text-lg">+</span>
+            Add Goal
           </button>
-        </div>
+        )}
       </div>
-
-      {showSaveMessage && (
-        <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm">
-          ✅ Goals saved successfully!
-        </div>
-      )}
 
       {isAddingGoal && (
         <div className="mb-4 p-4 bg-gray-50 rounded-lg border-2 border-blue-200">
@@ -138,33 +108,47 @@ export default function GoalTracker() {
           {goals.map((goal) => (
             <div
               key={goal.id}
-              className={`flex items-center gap-6 p-3 rounded-lg border transition-all duration-200 ${
+              className={`flex items-center justify-between p-3 rounded-lg border transition-all duration-200 ${
                 goal.completed
                   ? 'bg-green-50 border-green-200'
                   : 'bg-white border-gray-200 hover:border-gray-300'
               }`}
             >
-              <button
-                onClick={() => toggleGoal(goal.id)}
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
-                  goal.completed
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'border-gray-300 hover:border-green-400'
-                }`}
-              >
-                {goal.completed && <span className="text-xs">✓</span>}
-              </button>
-              
-              <span
-                className={`flex-1 text-sm ${
-                  goal.completed
-                    ? 'line-through text-gray-500'
-                    : 'text-gray-800'
-                }`}
-              >
-                {goal.text}
-              </span>
-              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => toggleGoal(goal.id)}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                      goal.completed
+                        ? 'bg-green-500 border-green-500 text-white'
+                        : 'border-gray-300 hover:border-green-400'
+                    }`}
+                    title="Toggle Complete"
+                  >
+                    {goal.completed && <span className="text-xs">✓</span>}
+                  </button>
+
+                  <button
+                    onClick={() => toggleGoal(goal.id)}
+                    className={`text-xs px-2 py-1 rounded-md border transition duration-200 ${
+                      goal.completed
+                        ? 'bg-white border-green-400 text-green-600 hover:bg-green-50'
+                        : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {goal.completed ? 'Undo' : 'Mark Complete'}
+                  </button>
+                </div>
+
+                <span
+                  className={`text-sm ${
+                    goal.completed ? 'line-through text-gray-500' : 'text-gray-800'
+                  }`}
+                >
+                  {goal.text}
+                </span>
+              </div>
+
               <button
                 onClick={() => deleteGoal(goal.id)}
                 className="text-red-500 hover:text-red-700 text-sm font-medium transition-colors duration-200"
