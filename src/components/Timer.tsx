@@ -1,17 +1,41 @@
 import { useState, useEffect } from 'react';
 import { usePlantPoints } from '../hooks/usePlantPoints';
 
+interface Task {
+  id: number;
+  title: string;
+  priority: string;
+  dueDate: string;
+  completed: boolean;
+}
+
 export default function Timer() {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTask, setSelectedTask] = useState('');
+  const [tasks, setTasks] = useState<Task[]>([]);
   const { addPlantPoint } = usePlantPoints();
-  
-  const tasks = [
-    { id: '1', name: 'Task 1' },
-    { id: '2', name: 'Task 2' },
-    { id: '3', name: 'Task 3' }
-  ];
+
+  // Load tasks from localStorage (same as Priority Grid)
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    setTasks(savedTasks);
+  }, []);
+
+  // Periodically refresh tasks from localStorage to catch new additions
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      setTasks(savedTasks);
+    }, 1000); // Check every second
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Get uncompleted tasks grouped by priority
+  const getUncompletedTasks = () => {
+    return tasks.filter(task => !task.completed);
+  };
 
   const buttonStyle = (color: string, disabled: boolean) => ({
     marginRight: "0.5rem",
@@ -37,10 +61,12 @@ export default function Timer() {
       addPlantPoint();
       
       // Save session data
+      const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
       const session = {
         id: Date.now().toString(),
         taskId: selectedTask,
-        taskName: tasks.find(t => t.id === selectedTask)?.name || 'Unknown Task',
+        taskName: selectedTaskData?.title || 'Unknown Task',
+        taskPriority: selectedTaskData?.priority || 'Unknown',
         startTime: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
         endTime: new Date().toISOString(),
         duration: 25 * 60
@@ -49,13 +75,15 @@ export default function Timer() {
       const existingSessions = JSON.parse(localStorage.getItem('pomodoroSessions') || '[]');
       localStorage.setItem('pomodoroSessions', JSON.stringify([...existingSessions, session]));
     }
-  }, [timeLeft, isRunning, selectedTask, addPlantPoint]);
+  }, [timeLeft, isRunning, selectedTask, addPlantPoint, tasks]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  const uncompletedTasks = getUncompletedTasks();
 
   return (
     <section>
@@ -74,14 +102,58 @@ export default function Timer() {
             fontSize: '1rem',
             borderRadius: '5px',
             border: '1px solid #ccc',
-            width: '200px'
+            width: '300px'
           }}
         >
           <option value="">Choose a task...</option>
-          {tasks.map(task => (
-            <option key={task.id} value={task.id}>{task.name}</option>
-          ))}
+          {uncompletedTasks.length === 0 ? (
+            <option disabled>No uncompleted tasks available</option>
+          ) : (
+            <>
+              <optgroup label="Urgent & Important">
+                {uncompletedTasks
+                  .filter(task => task.priority === "Urgent & Important")
+                  .map(task => (
+                    <option key={task.id} value={task.id.toString()}>
+                      {task.title} (Due: {task.dueDate})
+                    </option>
+                  ))}
+              </optgroup>
+              <optgroup label="Not Urgent & Important">
+                {uncompletedTasks
+                  .filter(task => task.priority === "Not Urgent & Important")
+                  .map(task => (
+                    <option key={task.id} value={task.id.toString()}>
+                      {task.title} (Due: {task.dueDate})
+                    </option>
+                  ))}
+              </optgroup>
+              <optgroup label="Urgent & Not Important">
+                {uncompletedTasks
+                  .filter(task => task.priority === "Urgent & Not Important")
+                  .map(task => (
+                    <option key={task.id} value={task.id.toString()}>
+                      {task.title} (Due: {task.dueDate})
+                    </option>
+                  ))}
+              </optgroup>
+              <optgroup label="Not Urgent & Not Important">
+                {uncompletedTasks
+                  .filter(task => task.priority === "Not Urgent & Not Important")
+                  .map(task => (
+                    <option key={task.id} value={task.id.toString()}>
+                      {task.title} (Due: {task.dueDate})
+                    </option>
+                  ))}
+              </optgroup>
+            </>
+          )}
         </select>
+        {uncompletedTasks.length === 0 && (
+          <p style={{ color: '#666', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+            Add some tasks in the Priority Grid first!
+          </p>
+        )}
       </div>
 
       <div style={{ fontSize: '3rem', fontWeight: 'bold', margin: '1rem 0' }}>
