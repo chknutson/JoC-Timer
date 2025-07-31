@@ -5,7 +5,7 @@ export default function Timer() {
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTask, setSelectedTask] = useState('');
-  const { addPlantPoint } = usePlantPoints();
+  const { addTimerPoints } = usePlantPoints();
   
   const tasks = [
     { id: '1', name: 'Task 1' },
@@ -34,7 +34,7 @@ export default function Timer() {
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
       setIsRunning(false);
-      addPlantPoint();
+      addTimerPoints();
       
       // Save session data
       const session = {
@@ -49,7 +49,7 @@ export default function Timer() {
       const existingSessions = JSON.parse(localStorage.getItem('pomodoroSessions') || '[]');
       localStorage.setItem('pomodoroSessions', JSON.stringify([...existingSessions, session]));
     }
-  }, [timeLeft, isRunning, selectedTask, addPlantPoint]);
+  }, [timeLeft, isRunning, selectedTask, addTimerPoints]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
