@@ -7,7 +7,31 @@ export function usePlantPoints() {
     setPlantPoints(prev => prev + 1);
   };
   
+  const addMultiplePoints = (amount: number) => {
+    setPlantPoints(prev => prev + amount);
+  };
+  
+  const addTimerPoints = () => {
+    setPlantPoints(prev => prev + 1); // Timer awards 1 point
+  };
+  
+  const addGoalPoints = () => {
+    setPlantPoints(prev => prev + 5); // Goal awards 5 points
+  };
+  
+  const resetPoints = () => {
+    setPlantPoints(0);
+  };
+  
   const getPlantPoints = () => plantPoints;
   
-  return { plantPoints, addPlantPoint, getPlantPoints };
+  return { 
+    plantPoints, 
+    addPlantPoint, 
+    addMultiplePoints, 
+    addTimerPoints, 
+    addGoalPoints, 
+    resetPoints,
+    getPlantPoints 
+  };
 } 
