@@ -19,43 +19,47 @@ export default function Plant() {
   };
 
   return (
-    <section style={{ textAlign: "center", padding: "2rem" }}>
+    <section>
       <h2>🌿 Plant Progress Tracker 🌿</h2>
 
       {/* Display the current stage */}
-      <div style={{ fontSize: "5rem", margin: "1.5rem 0" }}>
+      <div
+        style={{ fontSize: "5rem", margin: "1.5rem 0", textAlign: "center" }}
+      >
         {plantStages[stage]}
       </div>
 
       {/* Test buttons */}
-      <button
-        onClick={growPlant}
-        style={{
-          marginRight: "0.5rem",
-          padding: "0.5rem 1.2rem",
-          fontSize: "1rem",
-          background: "#bbf7d0",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        🌞 Grow Plant
-      </button>
+      <div style={{ textAlign: "center" }}>
+        <button
+          onClick={growPlant}
+          style={{
+            marginRight: "0.5rem",
+            padding: "0.5rem 1.2rem",
+            fontSize: "1rem",
+            background: "#bbf7d0",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          🌞 Grow Plant
+        </button>
 
-      <button
-        onClick={resetPlant}
-        style={{
-          padding: "0.5rem 1.2rem",
-          fontSize: "1rem",
-          background: "#fca5a5",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-      >
-        🔄 Reset Plant
-      </button>
+        <button
+          onClick={resetPlant}
+          style={{
+            padding: "0.5rem 1.2rem",
+            fontSize: "1rem",
+            background: "#fca5a5",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          🔄 Reset Plant
+        </button>
+      </div>
     </section>
   );
 }

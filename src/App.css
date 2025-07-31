@@ -1,7 +1,7 @@
 /* Reset + base styles */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f9fafb;
+  background: #f0e6ff; /* Light lavender background - matching index.css */
   margin: 0;
   padding: 0;
   color: #222;
