@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import "./PriorityGrid.css";
 import Card from './Card/Card';
+import React from 'react';
 import './PriorityGrid.css';
         
 interface Task {
