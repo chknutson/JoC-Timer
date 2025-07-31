@@ -169,37 +169,37 @@ const PriorityGrid: React.FC = () => {
           <h2>🟨 Priority Grid</h2>
         </div>
         <div className="priority-grid">
-        {/* Urgent & Important */}
-        <div className="card urgent-important">
-          <h3>Urgent & Important</h3>
-          <div className="task-placeholder">
-            <p>Add tasks here...</p>
+          {/* Urgent & Important */}
+          <div className="card urgent-important">
+            <h3>Urgent & Important</h3>
+            <div className="task-placeholder">
+            {renderTasksForPriority("Urgent & Important")}
+            </div>
           </div>
-        </div>
 
-        {/* Not Urgent & Important */}
-        <div className="card not-urgent-important">
-          <h3>Not Urgent & Important</h3>
-          <div className="task-placeholder">
-            <p>Add tasks here...</p>
+          {/* Not Urgent & Important */}
+          <div className="card not-urgent-important">
+            <h3>Not Urgent & Important</h3>
+            <div className="task-placeholder">
+            {renderTasksForPriority("Not Urgent & Important")}
+            </div>
           </div>
-        </div>
 
-        {/* Urgent & Not Important */}
-        <div className="card urgent-not-important">
-          <h3>Urgent & Not Important</h3>
-          <div className="task-placeholder">
-            <p>Add tasks here...</p>
+          {/* Urgent & Not Important */}
+          <div className="card urgent-not-important">
+            <h3>Urgent & Not Important</h3>
+            <div className="task-placeholder">
+            {renderTasksForPriority("Urgent & Not Important")}
+            </div>
           </div>
-        </div>
 
-        {/* Not Urgent & Not Important */}
-        <div className="card not-urgent-not-important">
-          <h3>Not Urgent & Not Important</h3>
-          <div className="task-placeholder">
-            <p>Add tasks here...</p>
+          {/* Not Urgent & Not Important */}
+          <div className="card not-urgent-not-important">
+            <h3>Not Urgent & Not Important</h3>
+            <div className="task-placeholder">
+            {renderTasksForPriority("Not Urgent & Not Important")}
+            </div>
           </div>
-                 </div>
         </div>
       </section>
     </>
