@@ -1,14 +1,17 @@
+import Card from './Card/Card';
+
 import React from 'react';
 import './PriorityGrid.css';
 
 const PriorityGrid: React.FC = () => {
   return (
-    <div className="priority-container">
-      <h2 className="priority-heading">Priority Tasks</h2>
-      <div className="priority-grid">
-        <div className="grid-container">
+      <section>
+        <div className="grid-header">
+          <h2>🟨 Priority Grid</h2>
+        </div>
+        <div className="priority-grid">
         {/* Urgent & Important */}
-        <div className="grid-item urgent-important">
+        <div className="card urgent-important">
           <h3>Urgent & Important</h3>
           <div className="task-placeholder">
             <p>Add tasks here...</p>
@@ -16,7 +19,7 @@ const PriorityGrid: React.FC = () => {
         </div>
 
         {/* Not Urgent & Important */}
-        <div className="grid-item not-urgent-important">
+        <div className="card not-urgent-important">
           <h3>Not Urgent & Important</h3>
           <div className="task-placeholder">
             <p>Add tasks here...</p>
@@ -24,7 +27,7 @@ const PriorityGrid: React.FC = () => {
         </div>
 
         {/* Urgent & Not Important */}
-        <div className="grid-item urgent-not-important">
+        <div className="card urgent-not-important">
           <h3>Urgent & Not Important</h3>
           <div className="task-placeholder">
             <p>Add tasks here...</p>
@@ -32,15 +35,14 @@ const PriorityGrid: React.FC = () => {
         </div>
 
         {/* Not Urgent & Not Important */}
-        <div className="grid-item not-urgent-not-important">
+        <div className="card not-urgent-not-important">
           <h3>Not Urgent & Not Important</h3>
           <div className="task-placeholder">
             <p>Add tasks here...</p>
           </div>
                  </div>
-       </div>
-     </div>
-   </div>
+        </div>
+      </section>
  );
 };
 

@@ -16,7 +16,16 @@
 }
 
 /* Priority Grid Layout */
+/* .priority-grid {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+} */
+/* Priority Grid Layout */
 .priority-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
