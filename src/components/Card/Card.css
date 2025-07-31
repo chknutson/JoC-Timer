@@ -1,0 +1,61 @@
+/* src/components/Card/Card.css */
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.16),
+    0 12px 24px rgba(0, 0, 0, 0.12),
+    0 18px 36px rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .card {
+    padding: 12px;
+    margin: 4px;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+  
+  .card-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .card-meta {
+    font-size: 0.75rem;
+  }
+} 
