@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import "./PriorityGrid.css";
 import Card from './Card/Card';
-import React from 'react';
 import './PriorityGrid.css';
         
 interface Task {
@@ -118,6 +117,7 @@ const PriorityGrid: React.FC = () => {
   };
 
   return (
+    <>
       {/* Add Task Form */}
       <form onSubmit={handleAddTask} className="add-task-form">
         <input
@@ -202,6 +202,7 @@ const PriorityGrid: React.FC = () => {
                  </div>
         </div>
       </section>
+    </>
  );
 };
 
