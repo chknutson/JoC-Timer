@@ -1,7 +1,6 @@
 import "./App.css";
 import { Toaster } from "react-hot-toast";
 
-
 import Header from "./components/Header";
 import PriorityGrid from "./components/PriorityGrid";
 import GoalTracker from "./components/GoalTracker";
@@ -13,11 +12,11 @@ export default function App() {
     <div className="app">
       <Header />
       <main>
+        <Plant />
+        <Timer />
         <PriorityGrid />
         <Toaster position="top-center" reverseOrder={false} />
         <GoalTracker />
-        <Timer />
-        <Plant />
       </main>
     </div>
   );
