@@ -28,8 +28,8 @@ export default function GoalTracker() {
   };
 
   const toggleGoal = (goalId: string) => {
-    setGoals(goals.map(goal => 
-      goal.id === goalId 
+    setGoals(goals.map(goal =>
+      goal.id === goalId
         ? { ...goal, completed: !goal.completed }
         : goal
     ));
@@ -108,33 +108,47 @@ export default function GoalTracker() {
           {goals.map((goal) => (
             <div
               key={goal.id}
-              className={`flex items-center gap-6 p-3 rounded-lg border transition-all duration-200 ${
+              className={`flex items-center justify-between p-3 rounded-lg border transition-all duration-200 ${
                 goal.completed
                   ? 'bg-green-50 border-green-200'
                   : 'bg-white border-gray-200 hover:border-gray-300'
               }`}
             >
-              <button
-                onClick={() => toggleGoal(goal.id)}
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
-                  goal.completed
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'border-gray-300 hover:border-green-400'
-                }`}
-              >
-                {goal.completed && <span className="text-xs">✓</span>}
-              </button>
-              
-              <span
-                className={`flex-1 text-sm ${
-                  goal.completed
-                    ? 'line-through text-gray-500'
-                    : 'text-gray-800'
-                }`}
-              >
-                {goal.text}
-              </span>
-              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => toggleGoal(goal.id)}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                      goal.completed
+                        ? 'bg-green-500 border-green-500 text-white'
+                        : 'border-gray-300 hover:border-green-400'
+                    }`}
+                    title="Toggle Complete"
+                  >
+                    {goal.completed && <span className="text-xs">✓</span>}
+                  </button>
+
+                  <button
+                    onClick={() => toggleGoal(goal.id)}
+                    className={`text-xs px-2 py-1 rounded-md border transition duration-200 ${
+                      goal.completed
+                        ? 'bg-white border-green-400 text-green-600 hover:bg-green-50'
+                        : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    {goal.completed ? 'Undo' : 'Mark Complete'}
+                  </button>
+                </div>
+
+                <span
+                  className={`text-sm ${
+                    goal.completed ? 'line-through text-gray-500' : 'text-gray-800'
+                  }`}
+                >
+                  {goal.text}
+                </span>
+              </div>
+
               <button
                 onClick={() => deleteGoal(goal.id)}
                 className="text-red-500 hover:text-red-700 text-sm font-medium transition-colors duration-200"
