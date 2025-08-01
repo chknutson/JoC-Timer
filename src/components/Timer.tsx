@@ -10,7 +10,7 @@ interface Task {
 }
 
 export default function Timer() {
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTask, setSelectedTask] = useState('');
 
@@ -71,9 +71,9 @@ export default function Timer() {
         taskId: selectedTask,
         taskName: selectedTaskData?.title || 'Unknown Task',
         taskPriority: selectedTaskData?.priority || 'Unknown',
-        startTime: new Date(Date.now() - 10 * 1000).toISOString(),
+        startTime: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
         endTime: new Date().toISOString(),
-        duration: 10
+        duration: 25 * 60
       };
       
       const existingSessions = JSON.parse(localStorage.getItem('pomodoroSessions') || '[]');
@@ -183,7 +183,7 @@ export default function Timer() {
         <button 
           onClick={() => {
             setIsRunning(false);
-            setTimeLeft(10);
+            setTimeLeft(25 * 60);
           }}
           style={buttonStyle("#fbbf24", false)}
         >
