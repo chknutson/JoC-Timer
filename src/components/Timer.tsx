@@ -10,14 +10,13 @@ interface Task {
 }
 
 export default function Timer() {
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTask, setSelectedTask] = useState('');
 
   const { addTimerPoints } = usePlantPoints();
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const { addPlantPoint } = usePlantPoints();
 
   // Load tasks from localStorage (same as Priority Grid)
   useEffect(() => {
@@ -60,8 +59,10 @@ export default function Timer() {
 
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
+      console.log('Timer completed! Adding point...');
       setIsRunning(false);
       addTimerPoints();
+      console.log('Point added via addTimerPoints');
       
       // Save session data
       const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
@@ -70,17 +71,16 @@ export default function Timer() {
         taskId: selectedTask,
         taskName: selectedTaskData?.title || 'Unknown Task',
         taskPriority: selectedTaskData?.priority || 'Unknown',
-        startTime: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
+        startTime: new Date(Date.now() - 10 * 1000).toISOString(),
         endTime: new Date().toISOString(),
-        duration: 25 * 60
+        duration: 10
       };
       
       const existingSessions = JSON.parse(localStorage.getItem('pomodoroSessions') || '[]');
       localStorage.setItem('pomodoroSessions', JSON.stringify([...existingSessions, session]));
+      console.log('Session saved to localStorage');
     }
-
-  }, [timeLeft, isRunning, selectedTask, addPlantPoint, tasks, addTimerPoints]);
-
+  }, [timeLeft, isRunning, selectedTask, addTimerPoints, tasks]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -183,7 +183,7 @@ export default function Timer() {
         <button 
           onClick={() => {
             setIsRunning(false);
-            setTimeLeft(25 * 60);
+            setTimeLeft(10);
           }}
           style={buttonStyle("#fbbf24", false)}
         >
