@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { usePlantPoints } from '../hooks/usePlantPoints';
 
 // Plant stages based on points
@@ -6,15 +7,16 @@ const plantStages = ["🪴", "🌱", "🌸", "🌸🎉"];
 export default function Plant() {
   const { plantPoints } = usePlantPoints();
 
-  // Calculate plant stage based on points
-  const getPlantStage = () => {
+  // Calculate plant stage based on points using useMemo
+  const currentStage = useMemo(() => {
     if (plantPoints >= 31) return 3; // 🌸🎉 (party bloom!)
     if (plantPoints >= 21) return 2; // 🌸 (bloom)
     if (plantPoints >= 11) return 1; // 🌱 (sprout)
     return 0; // 🪴 (pot)
-  };
+  }, [plantPoints]);
 
-  const currentStage = getPlantStage();
+
+
 
   return (
     <section>

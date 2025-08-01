@@ -12,7 +12,10 @@ export function usePlantPoints() {
   };
   
   const addGoalPoints = () => {
-    setPlantPoints(prev => prev + 5); // Goal awards 5 points
+    setPlantPoints(prev => {
+      const newPoints = prev + 5;
+      return newPoints;
+    }); // Goal awards 5 points
   };
   
   const resetPoints = () => {
