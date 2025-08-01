@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import "./PriorityGrid.css";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface Task {
   id: number;
@@ -8,11 +9,11 @@ interface Task {
   priority: string;
   dueDate: string;
   completed: boolean;
+  animation?: string; // for fade in/out animations
 }
 
-// ===== Constants =====
 const MAX_TASKS_TOTAL = 10;
-const MAX_TASKS_PER_CATEGORY = 2;
+const MAX_TASKS_PER_CATEGORY = 3;
 
 const celebrateMessages = [
   "🎉 Woohoo! Another one bites the dust!",
@@ -30,27 +31,15 @@ const priorities = [
 ];
 
 const PriorityGrid: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState(priorities[0].key);
   const [dueDate, setDueDate] = useState("");
+  const [showCompleted, setShowCompleted] = useState(true);
 
-  // ===== Load tasks =====
-  useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    setTasks(savedTasks);
-  }, []);
-
-  // ===== Save tasks =====
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  // ===== Computed booleans =====
   const categoryFull =
     tasks.filter(t => t.priority === priority && !t.completed).length >= MAX_TASKS_PER_CATEGORY;
 
-  // ===== Add task =====
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !dueDate) return;
@@ -65,45 +54,52 @@ const PriorityGrid: React.FC = () => {
       title,
       priority,
       dueDate,
-      completed: false
+      completed: false,
+      animation: "fade-in"
     };
+
     setTasks(prev => [...prev, newTask]);
     setTitle("");
     setPriority(priorities[0].key);
     setDueDate("");
   };
 
-  // ===== Delete task =====
   const handleDeleteTask = (id: number) => {
     setTasks(prev => prev.filter(task => task.id !== id));
   };
 
-  // ===== Complete/Undo task =====
   const handleToggleComplete = (id: number) => {
     setTasks(prev =>
       prev.map(task => {
         if (task.id === id) {
           const nowCompleted = !task.completed;
+
           if (nowCompleted) {
+            // 🎉 Celebration toast
             const message = celebrateMessages[Math.floor(Math.random() * celebrateMessages.length)];
             toast.success(message, {
               duration: 2500,
               style: { background: "#4caf50", color: "#fff", fontWeight: "bold" }
             });
+            return { ...task, completed: true, animation: "fade-out" };
+          } else {
+            // Undo — fade back in to active list
+            return { ...task, completed: false, animation: "fade-in" };
           }
-          return { ...task, completed: nowCompleted };
         }
         return task;
       })
     );
   };
 
-  // ===== Render tasks for a given priority =====
   const renderTasksForPriority = (priorityLabel: string) =>
     tasks
       .filter(task => task.priority === priorityLabel && !task.completed)
       .map(task => (
-        <div key={task.id} className="task-card">
+        <div
+          key={task.id}
+          className={`task-card ${task.completed ? "completed" : ""} ${task.animation || ""}`}
+        >
           <div>
             <strong>{task.title}</strong>
             <div className="task-date">{task.dueDate}</div>
@@ -112,6 +108,25 @@ const PriorityGrid: React.FC = () => {
             <button onClick={() => handleToggleComplete(task.id)}>
               {task.completed ? "Undo" : "Complete"}
             </button>
+            <button onClick={() => handleDeleteTask(task.id)}>❌</button>
+          </div>
+        </div>
+      ));
+
+  const renderCompletedTasks = () =>
+    tasks
+      .filter(task => task.completed)
+      .map(task => (
+        <div
+          key={task.id}
+          className={`task-card completed ${task.animation || ""}`}
+        >
+          <div>
+            <strong>{task.title}</strong>
+            <div className="task-date">{task.dueDate}</div>
+          </div>
+          <div className="task-actions">
+            <button onClick={() => handleToggleComplete(task.id)}>Undo</button>
             <button onClick={() => handleDeleteTask(task.id)}>❌</button>
           </div>
         </div>
@@ -178,6 +193,27 @@ const PriorityGrid: React.FC = () => {
           ))}
         </div>
       </section>
+
+      {/* ===== Completed Tasks Section ===== */}
+      {tasks.some(t => t.completed) && (
+        <div className="completed-tasks-section">
+          <div className="completed-header">
+            <h3>✅ Completed Tasks</h3>
+            <button
+              className="toggle-btn"
+              onClick={() => setShowCompleted(prev => !prev)}
+            >
+              {showCompleted ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          {showCompleted && (
+            <div className="card completed-tasks">
+              <div className="task-placeholder">{renderCompletedTasks()}</div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };
