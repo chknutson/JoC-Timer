@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import "./PriorityGrid.css";
-import Card from './Card/Card';
-import './PriorityGrid.css';
-        
+
 interface Task {
   id: number;
   title: string;
@@ -12,44 +10,53 @@ interface Task {
   completed: boolean;
 }
 
+// ===== Constants =====
+const MAX_TASKS_TOTAL = 10;
+const MAX_TASKS_PER_CATEGORY = 2;
+
+const celebrateMessages = [
+  "🎉 Woohoo! Another one bites the dust!",
+  "💪 You crushed it!",
+  "🌟 Boom! Done and dusted!",
+  "🔥 On fire! Keep going!",
+  "🍪 Cookie time — you earned it!"
+];
+
+const priorities = [
+  { key: "Urgent & Important", className: "urgent-important" },
+  { key: "Not Urgent & Important", className: "not-urgent-important" },
+  { key: "Urgent & Not Important", className: "urgent-not-important" },
+  { key: "Not Urgent & Not Important", className: "not-urgent-not-important" }
+];
+
 const PriorityGrid: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("Urgent & Important");
+  const [priority, setPriority] = useState(priorities[0].key);
   const [dueDate, setDueDate] = useState("");
 
-  // Celebration messages
-  const celebrateMessages = [
-    "🎉 Woohoo! Another one bites the dust!",
-    "💪 You crushed it!",
-    "🌟 Boom! Done and dusted!",
-    "🔥 On fire! Keep going!",
-    "🍪 Cookie time — you earned it!"
-  ];
-
-  // Load tasks from localStorage on mount
+  // ===== Load tasks =====
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     setTasks(savedTasks);
   }, []);
 
-  // Save tasks to localStorage whenever they change
+  // ===== Save tasks =====
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // Check if selected category is full (max 2 tasks per category)
+  // ===== Computed booleans =====
   const categoryFull =
-    tasks.filter((task) => task.priority === priority && !task.completed).length >= 2;
+    tasks.filter(t => t.priority === priority && !t.completed).length >= MAX_TASKS_PER_CATEGORY;
 
-  // Add a new task
+  // ===== Add task =====
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!title || !dueDate) return; // Must have title & date
-    if (tasks.length >= 10) return; // Total limit
+    if (!title || !dueDate) return;
+    if (tasks.length >= MAX_TASKS_TOTAL) return;
     if (categoryFull) {
-      toast.error(`You can only have 2 active tasks in "${priority}"`);
+      toast.error(`You can only have ${MAX_TASKS_PER_CATEGORY} active tasks in "${priority}"`);
       return;
     }
 
@@ -60,35 +67,30 @@ const PriorityGrid: React.FC = () => {
       dueDate,
       completed: false
     };
-
-    setTasks((prev) => [...prev, newTask]);
+    setTasks(prev => [...prev, newTask]);
     setTitle("");
-    setPriority("Urgent & Important");
+    setPriority(priorities[0].key);
     setDueDate("");
   };
 
-  // Delete a task
+  // ===== Delete task =====
   const handleDeleteTask = (id: number) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    setTasks(prev => prev.filter(task => task.id !== id));
   };
 
-  // Complete a task
-  const handleCompleteTask = (id: number) => {
-    setTasks((prev) =>
-      prev.map((task) => {
+  // ===== Complete/Undo task =====
+  const handleToggleComplete = (id: number) => {
+    setTasks(prev =>
+      prev.map(task => {
         if (task.id === id) {
           const nowCompleted = !task.completed;
-
-          // Only celebrate when marking as complete
           if (nowCompleted) {
-            const message =
-              celebrateMessages[Math.floor(Math.random() * celebrateMessages.length)];
+            const message = celebrateMessages[Math.floor(Math.random() * celebrateMessages.length)];
             toast.success(message, {
               duration: 2500,
               style: { background: "#4caf50", color: "#fff", fontWeight: "bold" }
             });
           }
-
           return { ...task, completed: nowCompleted };
         }
         return task;
@@ -96,36 +98,35 @@ const PriorityGrid: React.FC = () => {
     );
   };
 
-  // Render tasks for each priority (hide completed ones)
-  const renderTasksForPriority = (priorityLabel: string) => {
-    return tasks
-      .filter((task) => task.priority === priorityLabel && !task.completed) // ✅ hides completed
-      .map((task) => (
+  // ===== Render tasks for a given priority =====
+  const renderTasksForPriority = (priorityLabel: string) =>
+    tasks
+      .filter(task => task.priority === priorityLabel && !task.completed)
+      .map(task => (
         <div key={task.id} className="task-card">
           <div>
             <strong>{task.title}</strong>
             <div className="task-date">{task.dueDate}</div>
           </div>
           <div className="task-actions">
-            <button onClick={() => handleCompleteTask(task.id)}>
-              Complete
+            <button onClick={() => handleToggleComplete(task.id)}>
+              {task.completed ? "Undo" : "Complete"}
             </button>
             <button onClick={() => handleDeleteTask(task.id)}>❌</button>
           </div>
         </div>
       ));
-  };
 
   return (
     <>
-      {/* Add Task Form */}
+      {/* ===== Add Task Form ===== */}
       <form onSubmit={handleAddTask} className="add-task-form">
         <input
           type="text"
           placeholder="Task title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={tasks.length >= 10}
+          onChange={e => setTitle(e.target.value)}
+          disabled={tasks.length >= MAX_TASKS_TOTAL}
           maxLength={140}
         />
         <div className="char-info">
@@ -134,76 +135,51 @@ const PriorityGrid: React.FC = () => {
 
         <select
           value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          disabled={tasks.length >= 10} // Always allow switching categories
+          onChange={e => setPriority(e.target.value)}
+          disabled={tasks.length >= MAX_TASKS_TOTAL}
         >
-          <option>Urgent & Important</option>
-          <option>Not Urgent & Important</option>
-          <option>Urgent & Not Important</option>
-          <option>Not Urgent & Not Important</option>
+          {priorities.map(p => (
+            <option key={p.key}>{p.key}</option>
+          ))}
         </select>
 
         <input
           type="date"
           value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          disabled={tasks.length >= 10}
+          onChange={e => setDueDate(e.target.value)}
+          disabled={tasks.length >= MAX_TASKS_TOTAL}
         />
 
-        <button type="submit" disabled={tasks.length >= 10 || categoryFull}>
+        <button type="submit" disabled={tasks.length >= MAX_TASKS_TOTAL || categoryFull}>
           Add Task
         </button>
 
-        {tasks.length >= 10 && (
-          <p className="limit-warning">Task limit reached (max 10 tasks)</p>
+        {tasks.length >= MAX_TASKS_TOTAL && (
+          <p className="limit-warning">Task limit reached (max {MAX_TASKS_TOTAL} tasks)</p>
         )}
         {categoryFull && (
           <p className="limit-warning">
-            Max 2 active tasks allowed in this category
+            Max {MAX_TASKS_PER_CATEGORY} active tasks allowed in this category
           </p>
         )}
       </form>
 
+      {/* ===== Priority Grid ===== */}
       <section>
         <div className="grid-header">
           <h2>🟨 Priority Grid</h2>
         </div>
         <div className="priority-grid">
-          {/* Urgent & Important */}
-          <div className="card urgent-important">
-            <h3>Urgent & Important</h3>
-            <div className="task-placeholder">
-            {renderTasksForPriority("Urgent & Important")}
+          {priorities.map(p => (
+            <div key={p.key} className={`card ${p.className}`}>
+              <h3>{p.key}</h3>
+              <div className="task-placeholder">{renderTasksForPriority(p.key)}</div>
             </div>
-          </div>
-
-          {/* Not Urgent & Important */}
-          <div className="card not-urgent-important">
-            <h3>Not Urgent & Important</h3>
-            <div className="task-placeholder">
-            {renderTasksForPriority("Not Urgent & Important")}
-            </div>
-          </div>
-
-          {/* Urgent & Not Important */}
-          <div className="card urgent-not-important">
-            <h3>Urgent & Not Important</h3>
-            <div className="task-placeholder">
-            {renderTasksForPriority("Urgent & Not Important")}
-            </div>
-          </div>
-
-          {/* Not Urgent & Not Important */}
-          <div className="card not-urgent-not-important">
-            <h3>Not Urgent & Not Important</h3>
-            <div className="task-placeholder">
-            {renderTasksForPriority("Not Urgent & Not Important")}
-            </div>
-          </div>
+          ))}
         </div>
       </section>
     </>
- );
+  );
 };
 
 export default PriorityGrid;
