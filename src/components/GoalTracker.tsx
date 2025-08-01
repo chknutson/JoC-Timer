@@ -120,21 +120,22 @@ export default function GoalTracker() {
           {goals.map((goal) => (
             <div
               key={goal.id}
-              className={`flex items-center gap-6 p-3 rounded-lg border transition-all duration-200 ${
+              className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
                 goal.completed
-                  ? 'bg-green-50 border-green-200'
+                  ? 'bg-green-50 border-green-200 shadow-sm'
                   : 'bg-white border-gray-200 hover:border-gray-300'
               }`}
             >
               <button
                 onClick={() => toggleGoal(goal.id)}
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                className={`w-24 h-24 rounded-full border-4 flex items-center justify-center transition-all duration-500 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-200 ${
                   goal.completed
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'border-gray-300 hover:border-green-400'
+                    ? 'bg-gradient-to-br from-green-400 via-green-500 to-green-600 border-green-700 text-white shadow-2xl hover:shadow-3xl hover:bg-gradient-to-br hover:from-green-500 hover:via-green-600 hover:to-green-700 scale-110 animate-pulse ring-4 ring-green-300 ring-opacity-50'
+                    : 'border-gray-300 hover:border-green-500 hover:bg-green-50 hover:scale-105 hover:shadow-md'
                 }`}
+                title={goal.completed ? "Mark as incomplete" : "Mark as complete"}
               >
-                {goal.completed && <span className="text-xs">✓</span>}
+                {goal.completed && <span className="text-4xl font-bold animate-bounce">✓</span>}
               </button>
               
               <span
