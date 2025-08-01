@@ -59,13 +59,23 @@ export default function Timer() {
 
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
-      console.log('Timer completed! Adding point...');
+      console.log('Timer completed! Checking if task was completed...');
+      
+      // Check if the selected task was completed during this timer session
+      const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
+      const taskWasCompleted = selectedTaskData && selectedTaskData.completed;
+      
+      if (!taskWasCompleted) {
+        console.log('Task not completed during timer, awarding point...');
+        addTimerPoints();
+        console.log('Point awarded for timer completion');
+      } else {
+        console.log('Task was already completed during timer, no additional point');
+      }
+      
       setIsRunning(false);
-      addTimerPoints();
-      console.log('Point added via addTimerPoints');
       
       // Save session data
-      const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
       const session = {
         id: Date.now().toString(),
         taskId: selectedTask,
@@ -81,6 +91,24 @@ export default function Timer() {
       console.log('Session saved to localStorage');
     }
   }, [timeLeft, isRunning, selectedTask, addTimerPoints, tasks]);
+
+  // Monitor for task completion while timer is running
+  useEffect(() => {
+    if (isRunning && selectedTask) {
+      const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
+      
+      // Check if the selected task was just completed
+      if (selectedTaskData && selectedTaskData.completed) {
+        console.log('Task completed while timer running! Adding bonus point...');
+        addTimerPoints();
+        console.log('Bonus point added for task completion during timer');
+        
+        // Stop the timer since the task is now complete
+        setIsRunning(false);
+        setTimeLeft(25 * 60);
+      }
+    }
+  }, [tasks, isRunning, selectedTask, addTimerPoints]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
