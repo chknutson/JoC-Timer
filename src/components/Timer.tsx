@@ -17,7 +17,6 @@ export default function Timer() {
   const { addTimerPoints } = usePlantPoints();
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const { addPlantPoint } = usePlantPoints();
 
   // Load tasks from localStorage (same as Priority Grid)
   useEffect(() => {
@@ -60,8 +59,10 @@ export default function Timer() {
 
   useEffect(() => {
     if (timeLeft === 0 && isRunning) {
+      console.log('Timer completed! Adding point...');
       setIsRunning(false);
       addTimerPoints();
+      console.log('Point added via addTimerPoints');
       
       // Save session data
       const selectedTaskData = tasks.find(t => t.id.toString() === selectedTask);
@@ -77,10 +78,9 @@ export default function Timer() {
       
       const existingSessions = JSON.parse(localStorage.getItem('pomodoroSessions') || '[]');
       localStorage.setItem('pomodoroSessions', JSON.stringify([...existingSessions, session]));
+      console.log('Session saved to localStorage');
     }
-
-  }, [timeLeft, isRunning, selectedTask, addPlantPoint, tasks, addTimerPoints]);
-
+  }, [timeLeft, isRunning, selectedTask, addTimerPoints, tasks]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
