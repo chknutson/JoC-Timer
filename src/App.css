@@ -1,22 +1,22 @@
-/* Reset + base styles */
+/* ===== Base Reset & Typography ===== */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f0e6ff; /* Light lavender background - matching index.css */
+  background: #f0e6ff; /* Light lavender background */
   margin: 0;
   padding: 0;
   color: #222;
-  display: block; /* Override the flex display from index.css */
+  display: block; /* Override any flex display from index.css */
 }
 
-/* App container */
+/* ===== App Container ===== */
 .app {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content horizontally */
+  align-items: center;
   min-height: 100vh;
 }
 
-/* Header */
+/* ===== Header ===== */
 header {
   background-color: #bbf7d0;
   color: #166534;
@@ -28,27 +28,68 @@ header {
   width: 100%;
 }
 
-/* Main content layout */
+/* ===== Main Layout ===== */
 main {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
   padding: 2rem;
-
-  /* Limit and center main content */
   max-width: 900px;
   width: 100%;
 }
 
-/* Card sections */
-section {
+/* ===== Generic Card Style ===== */
+section,
+.timer-plant-card {
   background: white;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   width: 100%;
 }
 
+/* ===== Tagline inside Timer + Plant Card ===== */
+.focus-tagline {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #166534; /* Deep green for brand consistency */
+  margin-bottom: 1rem;
+}
+
+/* ===== Timer + Plant Card ===== */
+.timer-plant-card {
+  border: 2px solid #e0e0e0;
+}
+
+/* ===== Timer + Plant Layout ===== */
+.timer-plant-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.timer-section,
+.plant-section {
+  flex: 1 1 300px;
+}
+
+/* Center Plant content */
+.plant-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .timer-plant-content {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ===== Headings ===== */
 h2 {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
