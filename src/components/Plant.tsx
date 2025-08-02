@@ -23,7 +23,7 @@ export default function Plant() {
       <h2>🌿 Plant Progress Tracker 🌿</h2>
 
       {/* Display the current stage based on points */}
-      <div
+      <div>
         style={{ fontSize: "5rem", margin: "1.5rem 0", textAlign: "center" }}
       >
         {plantStages[currentStage]}
