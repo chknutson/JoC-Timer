@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 //import './AddTaskForm.css';
 
 function AddTaskForm() {
@@ -13,7 +13,7 @@ function AddTaskForm() {
     setDueDate('');
   };
 
-  const handleSave = (e) => {
+  const handleSave = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log({ title, priority, dueDate });
     resetForm();
