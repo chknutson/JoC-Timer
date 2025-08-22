@@ -74,7 +74,7 @@ export default function GoalTracker() {
     }
   };
 
-  const renderGoalsForCategory = (category: string, filterFn: (goal: Goal) => boolean) =>
+  const renderGoalsForCategory = (_category: string, filterFn: (goal: Goal) => boolean) =>
     goals
       .filter(filterFn)
       .map((goal) => (
