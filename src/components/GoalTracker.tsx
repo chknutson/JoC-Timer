@@ -8,11 +8,13 @@ interface Goal {
   text: string;
   completed: boolean;
   createdAt: Date;
+  priority?: 'high' | 'medium' | 'low';
 }
 
 export default function GoalTracker() {
   const [goals, setGoals] = useLocalStorage<Goal[]>('weekly-goals', []);
   const [newGoalText, setNewGoalText] = useState('');
+  const [newGoalPriority, setNewGoalPriority] = useState<'high' | 'medium' | 'low'>('medium');
   const [isAddingGoal, setIsAddingGoal] = useState(false);
   const [awardedGoals, setAwardedGoals] = useLocalStorage<string[]>('awarded-goals', []);
   const { addGoalPoints } = usePlantPoints();
@@ -23,10 +25,12 @@ export default function GoalTracker() {
         id: Date.now().toString(),
         text: newGoalText.trim(),
         completed: false,
-        createdAt: new Date()
+        createdAt: new Date(),
+        priority: newGoalPriority
       };
       setGoals([...goals, newGoal]);
       setNewGoalText('');
+      setNewGoalPriority('medium');
       setIsAddingGoal(false);
     }
   };
@@ -61,6 +65,38 @@ export default function GoalTracker() {
     }
   };
 
+  const getPriorityClass = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'high-priority';
+      case 'medium': return 'medium-priority';
+      case 'low': return 'low-priority';
+      default: return 'medium-priority';
+    }
+  };
+
+  const renderGoalsForCategory = (category: string, filterFn: (goal: Goal) => boolean) =>
+    goals
+      .filter(filterFn)
+      .map((goal) => (
+        <div
+          key={goal.id}
+          className={`task-card ${goal.completed ? "completed" : ""}`}
+        >
+          <div>
+            <strong>{goal.text}</strong>
+            <div className="task-date">
+              {new Date(goal.createdAt).toLocaleDateString()}
+            </div>
+          </div>
+          <div className="task-actions">
+            <button onClick={() => toggleGoal(goal.id)}>
+              {goal.completed ? "Undo" : "Complete"}
+            </button>
+            <button onClick={() => deleteGoal(goal.id)}>❌</button>
+          </div>
+        </div>
+      ));
+
   return (
     <section className="bg-white rounded-lg shadow-md p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
@@ -78,7 +114,7 @@ export default function GoalTracker() {
 
       {isAddingGoal && (
         <div className="mb-4 p-4 bg-gray-50 rounded-lg border-2 border-blue-200">
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-2">
             <input
               type="text"
               value={newGoalText}
@@ -88,6 +124,17 @@ export default function GoalTracker() {
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus
             />
+            <select
+              value={newGoalPriority}
+              onChange={(e) => setNewGoalPriority(e.target.value as 'high' | 'medium' | 'low')}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            >
+              <option value="high">🔥 High</option>
+              <option value="medium">⚡ Medium</option>
+              <option value="low">🌱 Low</option>
+            </select>
+          </div>
+          <div className="flex gap-2">
             <button
               onClick={addGoal}
               disabled={!newGoalText.trim()}
@@ -117,42 +164,27 @@ export default function GoalTracker() {
           <p className="text-sm">Click "Add Goal" to get started!</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {goals.map((goal) => (
-            <div
-              key={goal.id}
-              className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
-                goal.completed
-                  ? 'bg-green-50 border-green-200 shadow-sm'
-                  : 'bg-white border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <button
-                onClick={() => toggleGoal(goal.id)}
-                className={`goal-button ${goal.completed ? 'completed' : ''}`}
-                title={goal.completed ? "Mark as incomplete" : "Mark as complete"}
-              >
-                {goal.completed && <span className="checkmark">✓</span>}
-              </button>
-              
-              <span
-                className={`flex-1 text-sm ${
-                  goal.completed
-                    ? 'line-through text-gray-500'
-                    : 'text-gray-800'
-                }`}
-              >
-                {goal.text}
-              </span>
-              
-              <button
-                onClick={() => deleteGoal(goal.id)}
-                className="text-red-500 hover:text-red-700 text-sm font-medium transition-colors duration-200"
-              >
-                Delete
-              </button>
+        <div className="priority-grid">
+          <div className={`card ${getPriorityClass('high')}`}>
+            <h3>🔥 High Priority Goals</h3>
+            <div className="task-placeholder">
+              {renderGoalsForCategory('high-priority', goal => goal.priority === 'high' && !goal.completed)}
             </div>
-          ))}
+          </div>
+          
+          <div className={`card ${getPriorityClass('medium')}`}>
+            <h3>⚡ Medium Priority Goals</h3>
+            <div className="task-placeholder">
+              {renderGoalsForCategory('medium-priority', goal => goal.priority === 'medium' && !goal.completed)}
+            </div>
+          </div>
+          
+          <div className={`card ${getPriorityClass('low')}`}>
+            <h3>�� Low Priority Goals</h3>
+            <div className="task-placeholder">
+              {renderGoalsForCategory('low-priority', goal => goal.priority === 'low' && !goal.completed)}
+            </div>
+          </div>
         </div>
       )}
 

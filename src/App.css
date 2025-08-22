@@ -38,6 +38,99 @@ main {
   width: 100%;
 }
 
+/* ===== Garden Section ===== */
+.garden-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  width: 100%;
+  border: 2px solid #28a745;
+}
+
+.garden-container {
+  text-align: center;
+}
+
+.garden-main-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #166534;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.garden-main-bed {
+  min-height: 120px;
+  background: linear-gradient(135deg, #f0fff4, #e6ffe6);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  border: 1px solid #bbf7d0;
+}
+
+.garden-placeholder {
+  padding: 1rem;
+}
+
+.garden-plants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 1rem;
+}
+
+.garden-plant {
+  background: white;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.garden-plant:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #28a745;
+}
+
+.plant-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.plant-text {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.3;
+  word-break: break-word;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.plant-type-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.goal-plant .plant-type-badge {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.task-plant .plant-type-badge {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
 /* ===== Generic Card Style ===== */
 section,
 .timer-plant-card {
@@ -86,6 +179,27 @@ section,
   .timer-plant-content {
     flex-direction: column;
     align-items: center;
+  }
+  
+  .garden-main-title {
+    font-size: 1.5rem;
+  }
+  
+  .garden-main-bed {
+    padding: 1.5rem;
+  }
+  
+  .garden-plants-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .garden-plant {
+    padding: 12px;
+  }
+  
+  .plant-emoji {
+    font-size: 2rem;
   }
 }
 
